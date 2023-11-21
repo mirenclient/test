@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello, world!</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+  <link rel="icon" href="favicon.png">
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+  <script>
+		$("body").mouseup(function () {
+		$(".output").height($("textarea").height());
+		$(".output").height($("textarea").height());
+	});
+
+	$.fn.selectRange = function (start, end) {
+		if (!end) end = start;
+		return this.each(function () {
+			if (this.setSelectionRange) {
+				this.focus();
+				this.setSelectionRange(start, end);
+			} else if (this.createTextRange) {
+				var range = this.createTextRange();
+				range.collapse(true);
+				range.moveEnd("character", end);
+				range.moveStart("character", start);
+				range.select();
+			}
+		});
+	};
+
+	$(".bgs div").click(function (elem) {
+		$(".output").css("background", $(elem.target).css("background"));
+		$(".bgs div").css("border", 0);
+		$(elem.target).css("border", "3px #aaa solid");
+	});
+
+	var motd_raw = $(".editor textarea");
+	$(".tools button").click(function (e) {
+		var caretPos = motd_raw[0].selectionStart;
+		var textAreaTxt = motd_raw.val();
+		var txtToAdd = "§" + $(this).attr("data-color");
+		console.log(caretPos);
+		motd_raw
+			.val(
+				textAreaTxt.substring(0, caretPos) +
+					txtToAdd +
+					textAreaTxt.substring(caretPos)
+			)
+			.focus();
+		motd_raw.selectRange(caretPos + 2);
+		colour(motd_raw.val());
+	});
+
+	function colour(text) {
+		left = htmlEncode("<");
+		right = htmlEncode(">");
+		text = text.replace(/</gi, left);
+		text = text.replace(/>/gi, right);
+		text = text.replace(/\n/gi, "§r<br />");
+		//colours
+		text = text.replace(/§0/gi, '</span>§r<span class="c-1">');
+		text = text.replace(/§1/gi, '</span>§r<span class="c-2">');
+		text = text.replace(/§2/gi, '</span>§r<span class="c-3">');
+		text = text.replace(/§3/gi, '</span>§r<span class="c-4">');
+		text = text.replace(/§4/gi, '</span>§r<span class="c-5">');
+		text = text.replace(/§5/gi, '</span>§r<span class="c-6">');
+		text = text.replace(/§6/gi, '</span>§r<span class="c-7">');
+		text = text.replace(/§7/gi, '</span>§r<span class="c-8">');
+		text = text.replace(/§8/gi, '</span>§r<span class="c-9">');
+		text = text.replace(/§9/gi, '</span>§r<span class="c-10">');
+		text = text.replace(/§a/gi, '</span>§r<span class="c-11">');
+		text = text.replace(/§b/gi, '</span>§r<span class="c-12">');
+		text = text.replace(/§c/gi, '</span>§r<span class="c-13">');
+		text = text.replace(/§d/gi, '</span>§r<span class="c-14">');
+		text = text.replace(/§e/gi, '</span>§r<span class="c-15">');
+		text = text.replace(/§f/gi, '</span>§r<span class="c-16">');
+		//bold
+		text = text.replace(/§l/gi, "<span style='font-weight:900;'>");
+		//italic
+		text = text.replace(/§o/gi, "<span style='font-style:italic;'>");
+		//strikethrough
+		text = text.replace(/§m/gi, "<span style='text-decoration:line-through'>");
+		//underlined
+		text = text.replace(/§n/gi, "<span style='text-decoration:underline'>");
+		//obfuscated
+		text = text.replace(/§k/gi, "<span class='obfuscated'>");
+		//reset
+		text = text.replace(
+			/§r/gi,
+			"</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>"
+		);
+
+		document.getElementById("output").innerHTML = text;
+	}
+
+	setInterval(function () {
+		$(".obfuscated").text(randomizer($(".obfuscated").text()));
+	}, 100);
+
+	function htmlEncode(value) {
+		return $("<div/>").text(value).html();
+	}
+
+	function randomizer(rawr) {
+		var length = rawr.length;
+		var text = "";
+		var possible =
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+		for (var i = 0; i < length; i++)
+			text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+		return text;
+	}
+
+  </script>
+
+  <style>
+    *{box-sizing:border-box;font-family:"Minecraft","Roboto",sans-serif;font-size:x-large}@font-face{font-family:"minecraftfont";src:url(http://fontsforweb.com/public/fonts/1412/minecraftfont.ttf)}body{background-color:#eee}.tools{display:flex}.tools div{margin:15px;text-align:center}.tools button{border:0;min-width:30px;height:30px;border:1px #777 solid;margin:1px}.container{max-width:1200px;margin:0 auto}.editor{display:flex}textarea{background:#ccc;font-size:16px;width:50%;height:200px;padding:10px;border:1px #777 solid;font-size:x-large;spellcheck:false}.output{padding:10px;color:#fff;height:200px;width:50%;background-color:#eee;border:1px #777 solid;border-left:0;font-family:"Minecraft","Roboto",sans-serif;background:url(https://s-media-cache-ak0.pinimg.com/originals/0e/1f/c2/0e1fc2e0638e878d3ba8db495152164c.jpg);background-size:cover;box-shadow:inset 0 0 0 1000px rgba(0,0,0,.4)}.bgs{margin:20px 15px;display:flex;justify-content:space-between}.bgs div{margin:10px;flex-grow:1;width:100px;height:60px;background-color:#000;background-size:cover;box-shadow:inset 0 0 0 1000px rgba(0,0,0,.4)}.bgs .plains{background:url(https://dncache-mauganscorp.netdna-ssl.com/thumbseg/1006/1006445-bigthumbnail.jpg) center no-repeat;background-size:cover}.bgs .dirt{background:url(https://s-media-cache-ak0.pinimg.com/originals/0e/1f/c2/0e1fc2e0638e878d3ba8db495152164c.jpg) center no-repeat;border:3px #aaa solid}.bgs .item{background-color:#000}.bg-1{background-color:#000;color:#fff}.bg-2{background-color:#00a;color:#fff}.bg-3{background-color:#0a0;color:#fff}.bg-4{background-color:#0aa;color:#fff}.bg-5{background-color:#a00;color:#fff}.bg-6{background-color:#a0a;color:#fff}.bg-7{background-color:#fa0;color:#fff}.bg-8{background-color:#aaa;color:#000}.bg-9{background-color:#555;color:#fff}.bg-10{background-color:#55f;color:#000}.bg-11{background-color:#5f5;color:#000}.bg-12{background-color:#5ff;color:#000}.bg-13{background-color:#f55;color:#000}.bg-14{background-color:#f5f;color:#000}.bg-15{background-color:#ff5;color:#000}.bg-16{background-color:#fff;color:#000}.c-1{color:#000}.c-2{color:#00a}.c-3{color:#0a0}.c-4{color:#0aa}.c-5{color:#a00}.c-6{color:#a0a}.c-7{color:#fa0}.c-8{color:#aaa}.c-9{color:#555}.c-10{color:#55f}.c-11{color:#5f5}.c-12{color:#5ff}.c-13{color:#f55}.c-14{color:#f5f}.c-15{color:#ff5}.c-16{color:#fff}
+  </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="tools">
+            <div class="colors">
+                <button data-color="0" class="bg-1">§0</button>
+                <button data-color="1" class="bg-2">§1</button>
+                <button data-color="2" class="bg-3">§2</button>
+                <button data-color="3" class="bg-4">§3</button>
+                <button data-color="4" class="bg-5">§4</button>
+                <button data-color="5" class="bg-6">§5</button>
+                <button data-color="6" class="bg-7">§6</button>
+                <button data-color="7" class="bg-8">§7</button>
+                <button data-color="8" class="bg-9">§8</button>
+                <button data-color="9" class="bg-10">§9</button>
+                <button data-color="a" class="bg-11">§a</button>
+                <button data-color="b" class="bg-12">§b</button>
+                <button data-color="c" class="bg-13">§c</button>
+                <button data-color="d" class="bg-14">§d</button>
+                <button data-color="e" class="bg-15">§e</button>
+                <button data-color="f" class="bg-16">§f</button>
+            </div>
+            <div class="style">
+                <button data-color="l"><span style="font-weight: bold;">Bold</span></button>
+                <button data-color="n"><span style="text-decoration: underline;">Underline</span></button>
+                <button data-color="o"><span style="font-style: italic;">Italic</span></button>
+                <button data-color="m"><span style="text-decoration: line-through;">Strikethrough</span></button>
+                <button data-color="k">Obfuscated</button>
+                <button data-color="r">Reset</button>
+            </div>
+        </div>
+    
+        <div class="editor">
+            <textarea spellcheck="false" name="inputbox" onKeyUp="colour(this.value)"></textarea>
+            <div class="output" id="output">
+            </div>
+        </div>
+    
+        <div class="bgs">
+            <div class="dirt"></div>
+            <div class="plains"></div>
+            <div class="item"></div>
+    
+        </div>
+    
+        <!-- <div class="main">
+        <div class="colours">
+            <div class="btxt bg-1"><div class="label">§0</div></div>
+            <div class="btxt bg-2"><div class="label">§1</div></div>
+            <div class="btxt bg-3"><div class="label">§2</div></div>
+            <div class="btxt bg-4"><div class="label">§3</div></div>
+            <div class="btxt bg-5"><div class="label">§4</div></div>
+            <div class="btxt bg-6"><div class="label">§5</div></div>
+            <div class="btxt bg-7"><div class="label">§6</div></div>
+            <div class="btxt bg-8"><div class="label">§7</div></div>
+            <div class="btxt bg-9"><div class="label">§8</div></div>
+            <div class="btxt bg-10"><div class="label">§9</div></div>
+            <div class="btxt bg-11"><div class="label">§a</div></div>
+            <div class="btxt bg-12"><div class="label">§b</div></div>
+            <div class="btxt bg-13"><div class="label">§c</div></div>
+            <div class="btxt bg-14"><div class="label">§d</div></div>
+            <div class="btxt bg-15"><div class="label">§e</div></div>
+            <div class="btxt bg-16"><div class="label">§f</div></div>
+            <div class="ctxt"><div class="label">§l - <span style='font-weight:900;'>Bold</span></div></div>
+            <div class="ctxt"><div class="label">§n - <span style='text-decoration:underline;'>Underline</span></div></div>
+            <div class="ctxt"><div class="label">§o - <span style='font-style:italic;'>Itallic</span></div></div>
+            <div class="ctxt"><div class="label">§m - <span style='text-decoration:line-through;'>Strike</span></div></div>
+            <div class="ctxt"><div class="label">§r - Reset</div></div>
+        </div>
+    </div> -->
+
+</body>
+</html>
